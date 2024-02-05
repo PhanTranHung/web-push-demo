@@ -23,26 +23,4 @@ ENV USER=admin
 ENV UID=10001
 RUN adduser --disabled-password --gecos "" --no-create-home --shell "/sbin/nologin" --uid "${UID}" "${USER}"
 
-
-
-# Stage 3 - deployment -------------------------------------------
-FROM scratch as production
-
-
-WORKDIR /webpush
-COPY . .
-
-COPY --from=builder /webpush/server /webpush/server
-
-
-COPY --from=builder /lib/aarch64-linux-gnu/libm.so.6    /lib/aarch64-linux-gnu/libm.so.6
-COPY --from=builder /lib/aarch64-linux-gnu/libc.so.6    /lib/aarch64-linux-gnu/libc.so.6
-COPY --from=builder /lib/ld-linux-aarch64.so.1          /lib/ld-linux-aarch64.so.1
-
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.cr
-COPY --from=builder /etc/passwd /etc/passwd
-COPY --from=builder /etc/group /etc/group
-
-EXPOSE 8080
-
 CMD ["/webpush/server"]
