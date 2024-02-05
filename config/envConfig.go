@@ -43,9 +43,12 @@ func LoadEnvConfig() ConfigLoader {
 			return fmt.Errorf("failed to load VAPID_PRIVATE_KEY in env file")
 		}
 
-		serverPort := os.Getenv("SERVER_PORT")
-		if vapidPrivateKey == "" {
-			return fmt.Errorf("failed to load SERVER_PORT in env file")
+		serverPort := os.Getenv("PORT")
+		if serverPort == "" {
+			serverPort = os.Getenv("SERVER_PORT")
+			if vapidPrivateKey == "" {
+				return fmt.Errorf("failed to load SERVER_PORT in env file")
+			}
 		}
 
 		config.env.VapidContact = vapidContact
