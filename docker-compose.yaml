@@ -1,0 +1,28 @@
+version: "3.8"
+
+# This docker-compose run the locally built backend. It need to combined with
+# the docker-compose.db.yaml to have the database up
+#
+# To run this compose:
+#
+#     docker-compose --env-file ./.env.secret -f docker-compose.yaml -f docker-compose.db.yaml up -d --force-recreate
+#
+services:
+
+  backend:
+    container_name: web-push
+    image: web-push:local
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 10000:10000
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    networks:
+      - web-push
+
+networks:
+  web-push:
+    name: web-push

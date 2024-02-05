@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/labstack/echo/v4"
 	"golang.org/x/exp/slog"
 
@@ -8,8 +10,6 @@ import (
 	"webpush/transport"
 	"webpush/util"
 )
-
-const PORT = ":10000"
 
 func main() {
 
@@ -30,6 +30,8 @@ func main() {
 
 	e.Use(transport.BuildMiddlewareLogger())
 
-	slog.Info("Listening", slog.String("port", PORT))
-	e.Logger.Fatal(e.Start(PORT))
+	port := configs.GetENVConfigs().ServerPort
+	address := fmt.Sprintf(":%v", port)
+	slog.Info("Listening", slog.String("port", port))
+	e.Logger.Fatal(e.Start(address))
 }
