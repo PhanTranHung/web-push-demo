@@ -1,4 +1,6 @@
-
+[build]
+  command = "chmod +x ./build.sh && ./build.sh"
+  functions = "functions"
 
 [build.environment]
   GO_IMPORT_PATH = "github.com/PhanTranHung/web-push-demo"
