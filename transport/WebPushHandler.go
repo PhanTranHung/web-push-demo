@@ -1,9 +1,12 @@
 package transport
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"time"
 	"webpush/config"
 	"webpush/util"
 
@@ -56,17 +59,31 @@ func (h *WebPushHandler) SendNotification(c echo.Context) error {
 
 	envcfg := h.configs.GetENVConfigs()
 	for _, sub := range subs {
+		tr := http.Transport{
+			MaxIdleConns:       10,
+			IdleConnTimeout:    30 * time.Second,
+			DisableCompression: true,
+		}
+		client := http.Client{Transport: &tr}
+
 		resp, err := webpush.SendNotification(payload, &sub, &webpush.Options{
 			Subscriber:      envcfg.VapidContact,
 			VAPIDPublicKey:  envcfg.VapidPublicKey,
 			VAPIDPrivateKey: envcfg.VapidPrivateKey,
-			TTL:             30,
+			TTL:             2419200,
 			Topic:           "Universal events",
 			Urgency:         webpush.UrgencyHigh,
+			HTTPClient:      &client,
 		})
+
 		if err != nil {
 			slog.Error("unable to send notification to subscriber, error %w", err)
 		}
+
+		resBody := bytes.Buffer{}
+		_, err = io.Copy(&resBody, resp.Body)
+		fmt.Println(resBody.String())
+
 		defer resp.Body.Close()
 	}
 

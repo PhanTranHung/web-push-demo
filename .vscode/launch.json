@@ -9,7 +9,7 @@
       "type": "go",
       "request": "launch",
       "mode": "debug",
-      "program": "${workspaceFolder}/main/main.go",
+      "program": "${workspaceFolder}/main.go",
       "args": [],
       "cwd": "${workspaceFolder}",
       "buildFlags": "-ldflags='-X trada/config.bCommit=ffffffff -X trada/config.bVersion=local-ide -X trada/config.bDateTime=0000-00-00T00:00:00'",
