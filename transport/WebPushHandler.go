@@ -71,7 +71,6 @@ func (h *WebPushHandler) SendNotification(c echo.Context) error {
 			VAPIDPublicKey:  envcfg.VapidPublicKey,
 			VAPIDPrivateKey: envcfg.VapidPrivateKey,
 			TTL:             2419200,
-			Topic:           "Universal events",
 			Urgency:         webpush.UrgencyHigh,
 			HTTPClient:      &client,
 		})
